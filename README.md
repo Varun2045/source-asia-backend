@@ -1,27 +1,19 @@
-# Source Asia — Backend Assignment
+<h3 align="center">Source Asia — Backend Assignment</h3>
 
-> A production-aware backend built with **Node.js** and **Express**, split into two independent services to ensure clean separation of concerns.
+<div align="center">
 
----
 
-## Table of Contents
+A production-aware backend built with **Node.js** and **Express**, split into two independent services to ensure clean separation of concerns.
 
-1. [Prerequisites](#prerequisites)
-2. [Folder Structure](#folder-structure)
-3. [Part 1 — Rate-Limited API](#part-1--rate-limited-api)
-   - [Setup & Run](#setup--run)
-   - [Architecture](#architecture)
-   - [API Demo](#api-demo)
-   - [Testing](#testing)
-3. [Part 2 — Product Catalog](#part-2--product-catalog)
-   - [Setup & Run](#setup--run-1)
-   - [Data Model & Performance](#data-model--performance)
-   - [API Demo](#api-demo-1)
-   - [Testing](#testing-1)
+</div>
 
----
+<div align="center"><img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"></div>
 
-## Prerequisites
+
+<h3 align="center">Prerequisites</h3>
+
+
+<div align="center">
 
 | Requirement | Version |
 |---|---|
@@ -29,11 +21,13 @@
 | npm | Included with Node.js |
 | Terminal | PowerShell (Windows) or Bash (Mac/Linux) |
 
----
+</div>
 
-## Folder Structure
+<div align="center"><img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"></div>
 
-```
+<h3 align="center">Folder Structure</h3>
+
+```text
 SourceAsia/
 ├── Part 1/
 │   ├── server.js
@@ -52,13 +46,21 @@ SourceAsia/
 └── README.md
 ```
 
----
+<div align="center"><img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"></div>
 
-## Part 1 — Rate-Limited API
+<h3 align="center">Part 1 — Rate-Limited API</h3>
+
+
+<div align="center">
 
 Restricts each user to a maximum of **5 requests per 60-second window** using an in-memory fixed window strategy.
 
-### Setup & Run
+</div>
+
+<div align="center"><img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"></div>
+
+<h3 align="center">Setup & Run</h3>
+
 
 ```bash
 cd "Part 1"
@@ -67,53 +69,71 @@ node server.js
 # Server starts on http://localhost:3000
 ```
 
----
+<div align="center"><img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"></div>
 
-### Architecture
+<h3 align="center">Architecture</h3>
 
-**Fixed Window Strategy**
-A 60-second window is tracked per user. Once the window expires, the counter resets to zero automatically.
 
-**Status Codes**
+
+<div align="center">1. Fixed Window Strategy - A 60-second window is tracked per user. Once the window expires, the counter resets to zero automatically.</div>
+
+<br>
+
+<div align="center"><b>2. Status Codes</b></div>
+
+<br>
+
+<div align="center">
 
 | Code | Meaning |
 |---|---|
-| `200 OK` | Request accepted within the rate limit |
-| `429 Too Many Requests` | Limit exceeded — includes a JSON error body |
+| 200 OK | Request accepted within the rate limit |
+| 429 Too Many Requests | Limit exceeded — includes a JSON error body |
 
-**Concurrency Safety**
-Node.js runs on a single-threaded event loop. All reads and writes to the in-memory `Map` are synchronous, making race conditions impossible in this environment.
+</div>
 
-**Production Considerations**
+<br>
+
+<div align="center"> 3. Concurrency Safety - Node.js runs on a single-threaded event loop. All reads and writes to the in-memory <code>Map</code> are synchronous, making race conditions impossible in this environment.</div>
+
+<br>
+
+<div align="center"><b>4. Production Considerations</b></div>
+<br>
+
+<div align="center">
 
 | Limitation | Recommended Fix |
 |---|---|
-| State lost on server restart | Replace `Map` with **Redis** for persistence |
+| State lost on server restart | Replace `Map` with Redis for persistence |
 | Single-instance only | Redis also solves cross-instance state sharing behind a load balancer |
 
----
+</div>
 
-### API Demo
+<div align="center"><img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"></div>
 
-**Successful request — `200 OK`**
+<h3 align="center">API Demo</h3>
 
-![200 OK](assets/200%20OK.png)
 
-**Rate limit exceeded — `429 Too Many Requests`**
+<div align="center">
 
-![429 Too Many Requests](assets/429%20Too%20Many%20Requests.png)
+| Screenshot | Description |
+|---|---|
+| ![200 OK](Assets/200%20OK.png) | Successful request — 200 OK |
+| ![429](Assets/429%20Too%20Many%20Requests.png) | Rate limit exceeded — 429 Too Many Requests |
+| ![stats](Assets/stats.png) | User statistics — /stats |
 
-**User statistics — `/stats`**
+</div>
 
-![Stats](assets/stats.png)
+<div align="center"><img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"></div>
 
----
+<h3 align="center">Testing</h3>
 
-### Testing
+<div>*Run these in a separate PowerShell terminal while the server is running.</div>
 
-Run these in a **separate PowerShell terminal** while the server is running.
+<br>
 
-**POST `/request`** — Send a request (run 6 times to trigger the `429`):
+**1.POST /request** — Send a request (run 6 times to trigger the 429):
 
 ```powershell
 Invoke-RestMethod -Uri http://localhost:3000/request `
@@ -122,19 +142,25 @@ Invoke-RestMethod -Uri http://localhost:3000/request `
   -Body '{"user_id": "user123", "payload": {"data": "test"}}'
 ```
 
-**GET `/stats`** — Check usage for a user:
+**2.GET /stats** — Check usage for a user:
 
 ```powershell
 Invoke-RestMethod -Uri "http://localhost:3000/stats?user_id=user123" -Method GET
 ```
 
----
+<div align="center"><img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"></div>
 
-## Part 2 — Product Catalog
+<h3 align="center">Part 2 — Product Catalog</h3>
+
+<div align="center">
 
 An in-memory catalog API for managing products and associated media URLs, with strict list-vs-detail performance optimizations.
 
-### Setup & Run
+</div>
+
+<div align="center"><img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"></div>
+
+<h3 align="center">Setup & Run</h3>
 
 ```bash
 cd "Part 2"
@@ -143,52 +169,57 @@ node server.js
 # Server starts on http://localhost:3001
 ```
 
----
+<div align="center"><img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"></div>
 
-### Data Model & Performance
+<h3 align="center">Data Model & Performance</h3>
 
-**Storage**
-Products are stored in an in-memory `Map` keyed by a unique auto-incremented ID.
 
-**List Endpoint — `GET /products`**
-Returns only core fields and media counts (`image_count`, `video_count`). Full URL arrays are intentionally omitted to guarantee **O(1) serialization cost per product**, regardless of how many media items exist.
+<div align="center">1. Storage - Products are stored in an in-memory <code>Map</code> keyed by a unique auto-incremented ID.</div>
 
-**Detail Endpoint — `GET /products/{id}`**
-Returns the complete product object, including full `image_urls` and `video_urls` arrays.
+<br>
 
-**Production Considerations**
+<div align="center">2. List Endpoint — GET /products - Returns only core fields and media counts (<code>image_count</code>, <code>video_count</code>). Full URL arrays are intentionally omitted to guarantee O(1) serialization cost per product, regardless of how many media items exist.</div>
+
+<br>
+
+<div align="center">3. Detail Endpoint — GET /products/{id} - Returns the complete product object, including full <code>image_urls</code> and <code>video_urls</code> arrays.</div>
+
+<br>
+
+<div align="center"><b>4. Production Considerations</b></div>
+
+<br>
+<div align="center">
 
 | Concern | Recommended Solution |
 |---|---|
-| Storage | **PostgreSQL** — `products` table + `product_media` table with foreign key |
+| Storage | PostgreSQL — `products` table + `product_media` table with foreign key |
 | List performance | Optimized `COUNT()` grouping query on the media table |
-| Media hosting | **AWS S3** + CDN (Cloudflare or CloudFront) for global low-latency delivery |
+| Media hosting | AWS S3 + CDN (Cloudflare or CloudFront) for global low-latency delivery |
 
----
+</div>
 
-### API Demo
+<div align="center"><img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"></div>
 
-**Create a product — `POST /products`**
+<h3 align="center">API Demo</h3>
 
-![POST products](assets/POST%20products.png)
 
-**Append media — `POST /products/1/media`**
+<div align="center">
 
-![POST products 1 media](assets/POST%20products%201%20media.png)
+| Endpoint | Screenshot |
+|---|---|
+| Create a product — POST /products | ![POST products](Assets/POST%20products.png) |
+| Append media — POST /products/1/media | ![POST media](Assets/POST%20products%201%20media.png) |
+| List all products — GET /products (counts only, no URL arrays) | ![GET products](Assets/GET%20products.png) |
+| Full product detail — GET /products/1 | ![GET product detail](Assets/GET%20products%201.png) |
 
-**List all products — `GET /products`** *(counts only, no URL arrays)*
+</div>
 
-![GET products](assets/GET%20products.png)
+<div align="center"><img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"></div>
 
-**Full product detail — `GET /products/1`**
+<h3 align="center">Testing</h3>
 
-![GET products 1](assets/GET%20products%201.png)
-
----
-
-### Testing
-
-Run these commands **sequentially** in a PowerShell terminal.
+*Run these commands sequentially in a PowerShell terminal.
 
 **1. Create a new product:**
 
@@ -208,7 +239,7 @@ Invoke-RestMethod -Uri http://localhost:3001/products/1/media `
   -Body '{"video_urls": ["https://cdn.example.com/demo.mp4"]}'
 ```
 
-**3. List all products** *(observe: arrays omitted, counts shown)*:
+**3. List all products (observe: arrays omitted, counts shown):**
 
 ```powershell
 Invoke-RestMethod -Uri "http://localhost:3001/products" -Method GET
@@ -220,6 +251,4 @@ Invoke-RestMethod -Uri "http://localhost:3001/products" -Method GET
 Invoke-RestMethod -Uri "http://localhost:3001/products/1" -Method GET
 ```
 
----
-
-<p align="center">Built with Node.js · Express · In-Memory Storage</p>
+<div align="center"><img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"></div>
